@@ -8,7 +8,14 @@ const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Enable static export for GitHub Pages deployment
+  output: 'export',
+  // Exclude Payload admin routes from static export
+  experimental: {
+    isrMemoryCacheSize: 0,
+  },
   images: {
+    unoptimized: true, // Required for static export
     remotePatterns: [
       ...[NEXT_PUBLIC_SERVER_URL /* 'https://example.com' */].map((item) => {
         const url = new URL(item)
