@@ -309,6 +309,8 @@ If you only need to publish the public-facing website and will host the Payload 
 3. Run `pnpm run export:static` to generate the plain HTML/JS/CSS bundle in `out/`. The build process copies `public/.nojekyll` into `out/` so `_next` assets are not ignored by GitHub Pages.
 4. Push the freshly exported files to GitHub Pages. You can do that manually, or use `pnpm run deploy:gh-pages`, which runs `gh-pages` (included as a devDependency) to push `out/` to the `gh-pages` branch for you. If you host the backend elsewhere, rerun this script after every publish so the static site stays in sync.
 
+  A GitHub Actions workflow (`.github/workflows/deploy-gh-pages.yml`) also runs the same scripts on `main`/`master`, using the repository name to build the `NEXT_PUBLIC_GITHUB_PAGES_BASE_PATH` and `NEXT_PUBLIC_GITHUB_PAGES_ASSET_PREFIX`. Update those env vars in the workflow if you deploy to a user/org site instead of a project site.
+
 ⚠️ GitHub Pages can only serve static files, so there is no runtime Payload server there. Search results, draft previews, live preview, and the admin/API routes will not work on that host—they still need a live Payload instance. The exported pages are read-only snapshots of `published` documents, so make sure you rebuild and redeploy every time the content changes.
 
 ## Questions
