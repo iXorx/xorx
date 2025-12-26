@@ -298,6 +298,19 @@ Before deploying your app, you need to:
 
 You can also deploy your app manually, check out the [deployment documentation](https://payloadcms.com/docs/production/deployment) for full details.
 
+### Static export for GitHub Pages
+
+If you only need to publish the public-facing website and will host the Payload admin/API somewhere else (Payload Cloud, Vercel, your own server, etc.), you can export a static snapshot that GitHub Pages can serve.
+
+1. Publish your content in Payload so that the public drafts are marked as `published`. The static export picks up whatever is live in the database during `pnpm run export:static`.
+2. Set the GitHub Pages helpers in your `.env` (or your CI job) before exporting:
+  - `NEXT_PUBLIC_GITHUB_PAGES_BASE_PATH` should be the base path for the repo (for example `/payload-website` when hosting at `https://username.github.io/payload-website`). Leave it unset (or empty) if you are deploying to a user/org site like `https://username.github.io`.
+  - `NEXT_PUBLIC_GITHUB_PAGES_ASSET_PREFIX` should match the public URL that will serve the static assets (e.g., `https://username.github.io/payload-website`). These two values are consumed by [next.config.js](next.config.js) so that the exported files understand where they will live.
+3. Run `pnpm run export:static` to generate the plain HTML/JS/CSS bundle in `out/`. The build process copies `public/.nojekyll` into `out/` so `_next` assets are not ignored by GitHub Pages.
+4. Push the freshly exported files to GitHub Pages. You can do that manually, or use `pnpm run deploy:gh-pages`, which runs `gh-pages` (included as a devDependency) to push `out/` to the `gh-pages` branch for you. If you host the backend elsewhere, rerun this script after every publish so the static site stays in sync.
+
+⚠️ GitHub Pages can only serve static files, so there is no runtime Payload server there. Search results, draft previews, live preview, and the admin/API routes will not work on that host—they still need a live Payload instance. The exported pages are read-only snapshots of `published` documents, so make sure you rebuild and redeploy every time the content changes.
+
 ## Questions
 
 If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).

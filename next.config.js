@@ -6,8 +6,15 @@ const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
   : undefined || process.env.__NEXT_PRIVATE_ORIGIN || 'http://localhost:3000'
 
+const githubPagesBasePath = process.env.NEXT_PUBLIC_GITHUB_PAGES_BASE_PATH || ''
+const githubPagesAssetPrefix = process.env.NEXT_PUBLIC_GITHUB_PAGES_ASSET_PREFIX || ''
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // These options stay blank during normal dev/production builds and only
+  // kick in when exporting for GitHub Pages.
+  basePath: githubPagesBasePath || undefined,
+  assetPrefix: githubPagesAssetPrefix || undefined,
   images: {
     remotePatterns: [
       ...[NEXT_PUBLIC_SERVER_URL /* 'https://example.com' */].map((item) => {
