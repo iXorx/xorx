@@ -11,6 +11,10 @@ const githubPagesAssetPrefix = process.env.NEXT_PUBLIC_GITHUB_PAGES_ASSET_PREFIX
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Support the Next.js "output: 'export'" static export mode when
+  // `NEXT_OUTPUT_EXPORT` is set to `1`. This replaces the legacy
+  // `next export` CLI which was removed in newer Next.js releases.
+  output: process.env.NEXT_OUTPUT_EXPORT === '1' ? 'export' : undefined,
   // These options stay blank during normal dev/production builds and only
   // kick in when exporting for GitHub Pages.
   basePath: githubPagesBasePath || undefined,
