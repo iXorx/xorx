@@ -7,10 +7,12 @@ import { NextRequest } from 'next/server'
 
 import configPromise from '@payload-config'
 
-export async function GET(req: NextRequest): Promise<Response> {
+export const dynamic = 'force-static'
+
+export async function GET(_req: NextRequest): Promise<Response> {
   const payload = await getPayload({ config: configPromise })
 
-  const { searchParams } = new URL(req.url)
+  const { searchParams } = new URL(_req.url)
 
   const path = searchParams.get('path')
   const collection = searchParams.get('collection') as CollectionSlug
